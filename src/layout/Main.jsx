@@ -1,6 +1,7 @@
 import React from "react";
 import {Movies} from "../components/Movies";
 import Preloader from "../components/Preloader";
+import Search from "../components/Search";
 
 
 class Main extends React.Component {
@@ -9,24 +10,35 @@ class Main extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://www.omdbapi.com/?apikey=207af2f4&s=matrix&page=1')
+        fetch('http://www.omdbapi.com/?apikey=207af2f4&s=matrix')
             .then(r => r.json())
             .then(data => this.setState({movies: data.Search}))
-        console.log(this.state.movies)
 
     }
 
+    handlePress = (str) => {
+        fetch(`http://www.omdbapi.com/?apikey=207af2f4&s=${str}` )
+            .then(r => r.json())
+            .then(data => this.setState({movies: data.Search}))
+
+    }
+
+
     render() {
-        const { movies } = this.state;
+        const {movies} = this.state;
+
+
 
         return (
 
-            <main className='container content'>
+        <main className='container content'>
+            <Search
+                handlePress={this.handlePress}
+            />
+            {movies.length ? <Movies movies={movies}/> : <Preloader/>}
 
-                {movies.length ? <Movies movies={movies}/> : <Preloader />}
-
-            </main>
-        )
+        </main>
+    )
     }
 }
 

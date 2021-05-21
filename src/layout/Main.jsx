@@ -13,20 +13,21 @@ class Main extends React.Component {
     componentDidMount() {
         fetch('http://www.omdbapi.com/?apikey=207af2f4&s=matrix')
             .then(r => r.json())
-            .then(data => this.setState({movies: data.Search}))
+            .then(data => this.setState({movies: data.Search, loading: false}))
 
     }
 
     handlePress = (str, type = 'all') => {
+        this.setState({loading: true})
         fetch(`http://www.omdbapi.com/?apikey=207af2f4&s=${str}${type !== 'all' ? `&type=${type}` : ''}` )
             .then(r => r.json())
-            .then(data => this.setState({movies: data.Search}))
+            .then(data => this.setState({movies: data.Search, loading: false}))
 
     }
 
 
     render() {
-        const {movies} = this.state;
+        const {movies, loading} = this.state;
 
 
 
@@ -37,7 +38,7 @@ class Main extends React.Component {
                 handlePress={this.handlePress}
             />
             {/*{this.state.filterType.map((filter) => <Filter filterType={filter}/>)}*/}
-            {movies.length ? <Movies movies={movies}/> : <Preloader/>}
+            {!loading ? <Movies movies={movies}/> : <Preloader/>}
 
         </main>
     )

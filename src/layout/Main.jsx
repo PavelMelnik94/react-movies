@@ -6,7 +6,8 @@ import Search from "../components/Search";
 
 class Main extends React.Component {
     state = {
-        movies: []
+        movies: [],
+        loading: true
     }
 
     componentDidMount() {
@@ -16,8 +17,8 @@ class Main extends React.Component {
 
     }
 
-    handlePress = (str) => {
-        fetch(`http://www.omdbapi.com/?apikey=207af2f4&s=${str}` )
+    handlePress = (str, type = 'all') => {
+        fetch(`http://www.omdbapi.com/?apikey=207af2f4&s=${str}${type !== 'all' ? `&type=${type}` : ''}` )
             .then(r => r.json())
             .then(data => this.setState({movies: data.Search}))
 
@@ -35,6 +36,7 @@ class Main extends React.Component {
             <Search
                 handlePress={this.handlePress}
             />
+            {/*{this.state.filterType.map((filter) => <Filter filterType={filter}/>)}*/}
             {movies.length ? <Movies movies={movies}/> : <Preloader/>}
 
         </main>
